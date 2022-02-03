@@ -35,7 +35,7 @@ public class User {
     @Transient
     private String passwordConfirm;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -43,7 +43,7 @@ public class User {
     @ToString.Exclude
     private Set<Role> roles;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     private Player player;
 
     public User(String username, String password, String firstName, String lastName)

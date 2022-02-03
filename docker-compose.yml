@@ -1,0 +1,21 @@
+version: "3"
+services:
+  mariokart-tournament:
+    image: mariokart-tournament
+    ports:
+      - "8080:8080"
+    networks:
+      - mario-kart
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:8
+    networks:
+      - mario-kart
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=mariokart
+
+networks:
+  mario-kart:

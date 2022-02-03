@@ -5,10 +5,10 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
 
     <!-- Bootstrap CSS -->
-    <link crossorigin="anonymous"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-          rel="stylesheet"/>
+          crossorigin="anonymous">
     <link rel="icon" th:href="@{/images/favicon/retro_mushroom_32.png}" sizes="32x32" type="image/png"/>
 
 
@@ -16,10 +16,9 @@
 </head>
 
 <body>
-<!--<div class="container">-->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary align-middle">
     <a class="navbar-brand" href="#">Tracks Directory</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -32,25 +31,17 @@
         </div>
     </div>
 </nav>
-<!--</div>-->
 <br>
-<!-- Background image -->
-<!--<div class="bg-image bg-opacity-10"-->
-<!--     style="background: url('../../static/images/courses/battle_stadium.jpg') no-repeat;-->
-<!--            height: 100vh">-->
-<!--</div>-->
-<!-- Background image-->
-<!--<div th:style="'background-image:url(' + @{/images/courses/battle_stadium.jpg} +');'" th:class="bg-opacity-10" >-->
+
 <div class="container">
-    <!--    <h3>Tracks Directory</h3>-->
     <hr>
     <figure class="table-responsive-sm">
         <figcaption hidden>Tracks directory</figcaption>
         <table class="table table-bordered table-striped table-sm table-hover align-middle">
-            <thead class="table-primary">
+            <thead class=" table-primary">
             <tr>
-                <th scope="col">Track Name</th>
-                <th scope="col">First Appearance</th>
+                <th scope="col" th:style="|width:50%|">Track Name</th>
+                <th scope="col" th:style="|width:50%|">First Appearance</th>
             </tr>
             </thead>
             <tbody>
@@ -61,19 +52,39 @@
             </tbody>
         </table>
     </figure>
-    <hr>
-    <!-- tracks pagination -->
-    <h3>TODO Pagination</h3>
-    <hr>
 </div>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+<hr>
+<!-- tracks pagination -->
+<nav aria-label="Pagination" th:if="${tracks.totalPages gt 0}">
+    <ul class="pagination justify-content-center font-weight-bold">
+        <li class="page-item" th:classappend="${tracks.number eq 0} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/tracks/list/{id}(id=${tracks.number lt 2 ? 1 : tracks.number})}"
+               aria-label="Previous" title="Previous Page" data-bs-toggle="tooltip">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li class="page-item" th:classappend="${i eq tracks.number + 1} ? 'active'"
+            th:each="i : ${#numbers.sequence( 1, tracks.totalPages, 1)}">
+            <a class="page-link" th:href="@{/tracks/list/{id}(id=${i})}" th:text="${i}"
+               th:title="${'Page '+ i}" data-bs-toggle="tooltip"></a>
+        </li>
+        <li class="page-item" th:classappend="${tracks.number + 1 eq tracks.totalPages} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/tracks/list/{id}(id=${tracks.number + 2})}"
+               aria-label="Next" title="Next Page" data-bs-toggle="tooltip">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+<hr>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
         crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
         crossorigin="anonymous"></script>
 </body>
 </html>

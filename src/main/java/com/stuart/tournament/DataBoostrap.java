@@ -1,11 +1,18 @@
 package com.stuart.tournament;
 
+import com.stuart.tournament.entity.Player;
 import com.stuart.tournament.entity.Track;
+import com.stuart.tournament.repository.PlayerRepository;
 import com.stuart.tournament.repository.TrackRepository;
+import com.stuart.tournament.security.entity.Role;
+import com.stuart.tournament.security.entity.User;
+import com.stuart.tournament.security.repository.RoleRepository;
+import com.stuart.tournament.security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,16 +38,71 @@ public class DataBoostrap implements CommandLineRunner {
      * Enable saving to the track table.s
      */
     private final TrackRepository trackRepo;
+    private final PlayerRepository playerRepo;
+    private final UserService userService;
+    private final RoleRepository roleRepo;
 
     @Autowired
-    public DataBoostrap(TrackRepository trackRepository) {
+    public DataBoostrap(TrackRepository trackRepository,
+                        PlayerRepository playerRepository,
+                        UserService userService,
+                        RoleRepository roleRepository) {
         trackRepo = trackRepository;
-
+        playerRepo = playerRepository;
+        roleRepo = roleRepository;
+        this.userService = userService;
     }
 
     @Override
     public void run(String... args) throws Exception {
         setupTrackData();
+        setupRoleData();
+        setupPlayerAndUserData();
+    }
+
+    private void setupRoleData() {
+        List<Role> roles = roleRepo.findAll();
+        if (roles.size() != 2) {
+            Role userRole = new Role("BASIC");
+            Role adminRole = new Role("ADMIN");
+            roleRepo.save(userRole);
+            roleRepo.save(adminRole);
+        }
+    }
+
+    private void setupPlayerAndUserData() {
+        Player player1 = new Player("Stuart", "Clark");
+        player1.setPreferredName("Stu");
+        player1 = playerRepo.save(player1);
+        Player player2 = new Player("Faye", "Daway");
+        player2.setPreferredName(player2.getFirstName());
+        player2 = playerRepo.save(player2);
+        Player player3 = new Player("Bob", "Bobbington");
+        player3.setPreferredName("Bob");
+        player3 = playerRepo.save(player3);
+
+        User user1 = new User("StuAdmin", "admin-default", "Stuart", "Clark");
+        user1.setPlayer(player1);
+        userService.saveAdmin(user1);
+        user1 = userService.findByUsername(user1.getUsername());
+        player1.setUser(user1);
+        playerRepo.save(player1);
+
+        User user2 = new User("Faye332", "mypassword", "Faye", "Daway");
+        user2.setPlayer(player2);
+        userService.save(user2);
+        user2 = userService.findByUsername(user2.getUsername());
+        player2.setUser(user2);
+        playerRepo.save(player2);
+
+        User user3 = new User("BananaKing", "mypassword", "Bob", "Bobbington");
+        user3.setPlayer(player3);
+        userService.save(user3);
+        user3 = userService.findByUsername(user3.getUsername());
+        player3.setUser(user3);
+        playerRepo.save(player3);
+
+
     }
 
     /**

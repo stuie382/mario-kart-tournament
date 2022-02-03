@@ -1,5 +1,6 @@
 package com.stuart.tournament.entity;
 
+import com.stuart.tournament.security.entity.User;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,15 +34,22 @@ public class Player {
         this.lastName = lastName;
     }
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
+
     /**
      * A player may have been involved with many races
      */
-    @OneToMany(mappedBy = "player")
+    @OneToMany(mappedBy = "player",cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<RaceParticipation> participation;
 
     /**
      * A player may have created a number of tournaments
      */
-    @OneToMany(mappedBy = "owningPlayer")
+    @OneToMany(mappedBy = "owningPlayer", cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
     private List<Tournament> ownedTournaments;
 }

@@ -4,8 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * A mapping of players, and their final position, to races.
+ */
 @Entity
-@Table(name = "race_participation")
+@Table(name = "race_participation", schema = "mariokart")
 @Getter
 @Setter
 @ToString
@@ -37,9 +40,4 @@ public class RaceParticipation {
      */
     private Integer position;
 
-    public RaceParticipation(Race race, Integer position) {
-        this.race = race;
-        this.position = position;
-    }
 }
-

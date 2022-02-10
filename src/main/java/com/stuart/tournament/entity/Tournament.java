@@ -7,8 +7,11 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * The tournament is owned by a single player, and comprises one or more race events.
+ */
 @Entity
-@Table(name = "tournament")
+@Table(name = "tournament", schema = "mariokart")
 @NoArgsConstructor
 @Data
 public class Tournament {
@@ -48,5 +51,4 @@ public class Tournament {
             inverseJoinColumns = @JoinColumn(name = "race_id", referencedColumnName = "id")
     )
     private List<Race> races;
-
 }

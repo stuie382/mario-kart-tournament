@@ -1,30 +1,27 @@
 package com.stuart.tournament.security.entity;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import java.util.Set;
 
-@Entity
+/**
+ * The roles that a user can have in the system.
+ */
 @NoArgsConstructor
-@Getter
 @Setter
-@ToString
-@EqualsAndHashCode
-@Table(name = "role")
+@Getter
+@Entity
+@Table(name = "role", schema = "mariokart")
 public class Role {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
-    @NotBlank
+    @Column(length = 60)
     private String name;
-
-    @ManyToMany(mappedBy = "roles")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Set<User> users;
 
     public Role(String name) {
         this.name = name;

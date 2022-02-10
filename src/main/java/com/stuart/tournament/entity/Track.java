@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+/**
+ * The track has a name and the details of which game in the series it first appeared in.
+ */
 @Entity
 @Table(name = "track", schema = "mariokart")
 @Getter

@@ -7,6 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.io.Serializable;
 
+/**
+ * A compound key of player ID and race ID.
+ */
 @Embeddable
 @NoArgsConstructor
 @Data

@@ -5,10 +5,9 @@ import com.stuart.tournament.entity.Track;
 import com.stuart.tournament.repository.TrackRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TrackServiceImpl implements TrackService {
@@ -23,11 +22,8 @@ public class TrackServiceImpl implements TrackService {
     }
 
     @Override
-    public List<TrackDto> findAll() {
-        List<Track> tracks = trackRepository.findAllByOrderByTrackNameAscFirstAppearanceAsc();
-        return tracks.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public Page<Track> findPaginated(Pageable pageable) {
+        return trackRepository.findAllByOrderByTrackNameAscFirstAppearanceAsc(pageable);
 
     }
 

@@ -1,14 +1,5 @@
 package com.stuart.tournament.dto;
 
-import com.stuart.tournament.entity.Player;
-import com.stuart.tournament.entity.Race;
-import com.stuart.tournament.entity.RaceParticipationId;
-
-import javax.persistence.EmbeddedId;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-
 public class RaceParticipationDto {
 
     private RaceParticipationIdDto id;

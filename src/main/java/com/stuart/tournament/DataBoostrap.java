@@ -1,11 +1,19 @@
 package com.stuart.tournament;
 
+import com.stuart.tournament.entity.Player;
 import com.stuart.tournament.entity.Track;
+import com.stuart.tournament.repository.PlayerRepository;
 import com.stuart.tournament.repository.TrackRepository;
+import com.stuart.tournament.security.entity.Role;
+import com.stuart.tournament.security.entity.User;
+import com.stuart.tournament.security.repository.RoleRepository;
+import com.stuart.tournament.security.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -28,23 +36,89 @@ public class DataBoostrap implements CommandLineRunner {
     private static final String MARIO_KART_7 = "Mario Kart 7";
 
     /**
-     * Enable saving to the track table.s
+     * Enable saving to the track table
      */
     private final TrackRepository trackRepo;
+    private final PlayerRepository playerRepo;
+    private final UserRepository userRepo;
+    private final RoleRepository roleRepo;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DataBoostrap(TrackRepository trackRepository) {
-        trackRepo = trackRepository;
+    public DataBoostrap(TrackRepository trackRepository,
+                        PlayerRepository playerRepository,
+                        UserRepository userRepository,
+                        RoleRepository roleRepository,
+                        PasswordEncoder passwordEncoder) {
 
+        trackRepo = trackRepository;
+        playerRepo = playerRepository;
+        roleRepo = roleRepository;
+        userRepo = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) throws Exception {
         setupTrackData();
+        setupRoleData();
+        setupPlayerAndUserData();
+    }
+
+    /**
+     * Bootstrap role data. Development use only.
+     */
+    private void setupRoleData() {
+        List<Role> roles = roleRepo.findAll();
+        if (roles.size() != 2) {
+            Role userRole = new Role("ROLE_USER");
+            Role adminRole = new Role("ROLE_ADMIN");
+            roleRepo.save(userRole);
+            roleRepo.save(adminRole);
+        }
+    }
+
+    /**
+     * Bootstrap some user and player data. Development use only.
+     */
+    @Transactional
+    public void setupPlayerAndUserData() {
+        Player player1 = new Player("Stuart", "Clark", "StuAdmin");
+        player1 = playerRepo.save(player1);
+        Player player2 = new Player("Faye", "Daway", "Faye332");
+        player2 = playerRepo.save(player2);
+        Player player3 = new Player("Bob", "Bobbington", "BananaKing");
+        player3 = playerRepo.save(player3);
+
+        User user1 = new User("Stuart", "Clark", "StuAdmin",
+                passwordEncoder.encode("admin-default"), roleRepo.findAll());
+        user1.setPlayer(player1);
+        userRepo.save(user1);
+        player1.setUser(user1);
+        playerRepo.save(player1);
+
+        Role userRole = roleRepo.findByName("ROLE_USER");
+
+        User user2 = new User("Faye", "Daway", "Faye332",
+                passwordEncoder.encode("mypassword"), List.of(userRole));
+        user2.setPlayer(player2);
+        userRepo.save(user2);
+        player2.setUser(user2);
+        playerRepo.save(player2);
+
+        User user3 = new User("Bob", "Bobbington", "BananaKing",
+                passwordEncoder.encode("mypassword"), List.of(userRole));
+        user3.setPlayer(player3);
+        userRepo.save(user3);
+        player3.setUser(user3);
+        playerRepo.save(player3);
+
+
     }
 
     /**
      * This will load all the static track information required for Mario Kart 8 Deluxe.
+     * Development use only.
      */
     private void setupTrackData() {
         Map<String, String> trackInfo = Map.ofEntries(entry("Mario Kart Stadium", MARIO_KART_8),
@@ -95,7 +169,7 @@ public class DataBoostrap implements CommandLineRunner {
                 entry("Ribbon Road", MARIO_KART_SUPER_CIRCUIT),
                 entry("Super Bell Subway", MARIO_KART_8),
                 entry("Big Blue", MARIO_KART_8));
-        List<Track> tracks = new ArrayList<>();
+        List<Track> tracks = new ArrayList<>(trackInfo.size());
         for (Map.Entry<String, String> track : trackInfo.entrySet()) {
             tracks.add(new Track(track.getKey(), track.getValue()));
         }

@@ -1,16 +1,20 @@
 package com.stuart.tournament.repository;
 
 import com.stuart.tournament.entity.Track;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
+/**
+ * The interface to allow access to the track data.
+ */
 public interface TrackRepository extends JpaRepository<Track, Long> {
 
     /**
-     * Get a list of all tracks sorted in alphabetical order by track name.
+     * Get a list of all tracks sorted in alphabetical order by track name then first appearance.
      *
+     * @param pageable - The pages of Tracks
      * @return - The list of tracks in alphabetical order
      */
-    List<Track> findAllByOrderByTrackNameAscFirstAppearanceAsc();
+    Page<Track> findAllByOrderByTrackNameAscFirstAppearanceAsc(Pageable pageable);
 }

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -12,28 +14,25 @@
     <link rel="icon" th:href="@{/images/favicon/retro_mushroom_32.png}" sizes="32x32" type="image/png"/>
     <link type="text/css" rel="stylesheet" th:href="@{/css/basic.css}"/>
 
-    <title>Tracks Directory</title>
+    <title>Tracks</title>
 </head>
 
-<body>
+<body class="background-default">
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary align-middle">
-    <a class="navbar-brand" href="#">Tracks Directory</a>
+    <a class="navbar-brand" href="#" style="margin-left:10px">Tracks Directory</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-        <div class="navbar-nav">
+        <div class="navbar-nav" sec:authorize="isAuthenticated()">
             <a class="nav-item nav-link active" th:href="@{/}">Home <span class="sr-only"></span></a>
-            <a class="nav-item nav-link" href="#">Features</a>
-            <a class="nav-item nav-link" href="#">Pricing</a>
-            <a class="nav-item nav-link disabled" href="#">Disabled</a>
+            <a class="nav-item nav-link" th:href="@{/tournaments}">Tournaments</a>
+            <a class="nav-item nav-link" th:method="POST" th:href="@{/logout}">Logout</a>
         </div>
     </div>
 </nav>
-<br>
-
-<div class="container">
+<div class="container" >
     <hr>
     <figure class="table-responsive-sm">
         <figcaption hidden>Tracks directory</figcaption>
@@ -53,32 +52,31 @@
         </table>
     </figure>
 </div>
-<hr>
 <!-- tracks pagination -->
-<nav aria-label="Pagination" th:if="${tracks.totalPages gt 0}">
+<nav aria-label="Pagination" th:if="${totalPages gt 0}" >
     <ul class="pagination justify-content-center font-weight-bold">
-        <li class="page-item" th:classappend="${tracks.number eq 0} ? 'disabled'">
+        <li class="page-item" th:classappend="${totalItems eq 0} ? 'disabled'">
             <a class="page-link"
-               th:href="@{/tracks/list/{id}(id=${tracks.number lt 2 ? 1 : tracks.number})}"
+               th:href="@{/tracks/list/{id}(id=${totalItems lt 2 ? 1 : totalItems})}"
                aria-label="Previous" title="Previous Page" data-bs-toggle="tooltip">
                 <span aria-hidden="true">&laquo;</span>
             </a>
         </li>
-        <li class="page-item" th:classappend="${i eq tracks.number + 1} ? 'active'"
-            th:each="i : ${#numbers.sequence( 1, tracks.totalPages, 1)}">
+        <li class="page-item" th:classappend="${i eq totalItems + 1} ? 'active'"
+            th:each="i : ${#numbers.sequence( 1, totalPages, 1)}">
             <a class="page-link" th:href="@{/tracks/list/{id}(id=${i})}" th:text="${i}"
                th:title="${'Page '+ i}" data-bs-toggle="tooltip"></a>
         </li>
-        <li class="page-item" th:classappend="${tracks.number + 1 eq tracks.totalPages} ? 'disabled'">
+        <li class="page-item" th:classappend="${totalItems + 1 eq totalPages} ? 'disabled'">
             <a class="page-link"
-               th:href="@{/tracks/list/{id}(id=${tracks.number + 2})}"
+               th:href="@{/tracks/list/{id}(id=${totalItems + 2})}"
                aria-label="Next" title="Next Page" data-bs-toggle="tooltip">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </li>
     </ul>
 </nav>
-<hr>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
         integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"

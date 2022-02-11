@@ -15,8 +15,20 @@ public class TournamentApplication {
 
     @Bean
     public ModelMapper modelMapper() {
-        return new ModelMapper();
+        ModelMapper mapper = new ModelMapper();
+//        mapper.getConfiguration().set
+//        mapper.addMappings(trackPropertyMap);
+
+        return mapper;
     }
+//
+//    private PropertyMap<Track, TrackDto> trackPropertyMap = new PropertyMap<Track, TrackDto>() {
+//        @Override
+//        protected void configure() {
+//            skip(destination.setId);
+//        }
+//    }
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

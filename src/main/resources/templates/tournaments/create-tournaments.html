@@ -16,7 +16,7 @@
 
     <title>Create A Tournament</title>
 </head>
-<body class="background-default">
+<body class="background-default ">
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary align-middle">
     <a class="navbar-brand" href="#" style="margin-left:10px">Create A Tournament</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -33,12 +33,11 @@
     </div>
 </nav>
 <!--Date, Name, owning player, list of races-->
-<div class="container">
+<div class="container col-md-2 text-start">
     <form th:action="@{tournaments/create}" th:object="${theTournament}" method="POST">
-        <div class="input-group">
-            <label for="startDate">Tournament Start Date</label>
-            <input id="startDate" class="form-control" type="date">
-        </div>
+        <span class="input-group-addon date"><i class="glyphicon glyphicon-user"></i></span>
+        <label th:class="h3" for="startDate" class="sr-only">Tournament Start Date</label>
+        <input id="startDate" type="date" name="startDate" class="form-control" th:field="*{date}">
     </form>
 
 </div>

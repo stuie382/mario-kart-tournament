@@ -1,6 +1,7 @@
 package com.stuart.tournament;
 
 import com.stuart.tournament.utilities.Mapper;
+import org.hibernate.collection.spi.PersistentCollection;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.config.Configuration;
 import org.springframework.boot.SpringApplication;
@@ -18,8 +19,11 @@ public class TournamentApplication {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
-                .setFieldMatchingEnabled(true);
+        mapper.getConfiguration()
+                .setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true)
+                // Ignore collections on entities that are lazy loaded by default.
+                .setPropertyCondition(context -> !(context.getSource() instanceof PersistentCollection));
         return mapper;
     }
 

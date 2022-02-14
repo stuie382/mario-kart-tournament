@@ -3,7 +3,7 @@ package com.stuart.tournament.controller;
 import com.stuart.tournament.dto.TrackDto;
 import com.stuart.tournament.entity.Track;
 import com.stuart.tournament.service.TrackService;
-import org.modelmapper.ModelMapper;
+import com.stuart.tournament.utilities.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -27,13 +27,13 @@ public class TrackController {
      * Autowired services.
      */
     private final TrackService trackService;
-    private final ModelMapper modelMapper;
+    private final Mapper mapper;
 
 
     @Autowired
-    public TrackController(TrackService trackService, ModelMapper modelMapper) {
+    public TrackController(TrackService trackService, Mapper mapper) {
         this.trackService = trackService;
-        this.modelMapper = modelMapper;
+        this.mapper = mapper;
     }
 
     /**
@@ -73,18 +73,11 @@ public class TrackController {
      * @return - A new set of pages using DTOs
      */
     private Page<TrackDto> convertPageTrackToPageDto(Page<Track> trackPages) {
+
         return new PageImpl<>(trackPages.stream()
-                .map(this::convertToDto)
+                .map(element -> mapper.convertSingle(element, TrackDto.class))
                 .collect(Collectors.toList()));
     }
 
-    /**
-     * Convert an Entity object into its DTO counterpart.
-     *
-     * @param entity - The managed entity to convert
-     * @return -The DTO version of the entity
-     */
-    private TrackDto convertToDto(Track entity) {
-        return modelMapper.map(entity, TrackDto.class);
-    }
+
 }

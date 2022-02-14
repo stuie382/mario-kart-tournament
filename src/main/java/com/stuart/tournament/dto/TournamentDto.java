@@ -1,16 +1,20 @@
 package com.stuart.tournament.dto;
 
+import com.stuart.tournament.entity.Player;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
 public class TournamentDto implements Serializable {
-    private final Long id;
-    private final String tournamentName;
-    private final Date date;
-    private final PlayerDto owningPlayer;
-    private final List<RaceDto> races;
+    private Long id;
+    private String tournamentName;
+    private LocalDate date;
+    private String owningUsername;
+    private Set<RaceDto> races;
+    private Set<Player> players;
 }

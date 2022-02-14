@@ -1,11 +1,14 @@
 package com.stuart.tournament.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 /**
  * The tournament is owned by a single player, and comprises one or more race events.
@@ -28,8 +31,8 @@ public class Tournament {
     /**
      * The date the tournament was held, or the opening day if it runs for multiple days.
      */
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    @Basic
+    private LocalDate date;
 
     /**
      * A tournament would have been created by a player. This player may have created
@@ -50,5 +53,20 @@ public class Tournament {
             joinColumns = @JoinColumn(name = "tournament_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "race_id", referencedColumnName = "id")
     )
-    private List<Race> races;
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Race> races;
+
+    /**
+     * A tournament has at least one player taking part.
+     */
+    @OneToMany
+    @JoinTable(
+            name = "tournament_players",
+            joinColumns = @JoinColumn(name = "tournament_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "player_id", referencedColumnName = "id")
+    )
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    private Set<Player> players;
 }

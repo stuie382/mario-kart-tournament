@@ -1,28 +1,28 @@
 package com.stuart.tournament.dto;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Transient;
 import java.io.Serializable;
-import java.util.List;
+import java.util.Set;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlayerDto implements Serializable {
-    private final long id;
-    private final String firstName;
-    private final String lastName;
-    private final String preferredName;
+    private long id;
+    private String firstName;
+    private String lastName;
+    private String preferredName;
 
     @Transient
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<RaceParticipationDto> participation;
+    private Set<RaceParticipationDto> participation;
 
     @Transient
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<TournamentDto> ownedTournaments;
+    private Set<TournamentDto> ownedTournaments;
 }
 

@@ -2,6 +2,7 @@ package com.stuart.tournament.controller;
 
 import com.stuart.tournament.entity.Track;
 import com.stuart.tournament.service.TrackService;
+import com.stuart.tournament.utilities.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +35,7 @@ class TrackControllerTest {
 
     @BeforeEach
     void setUp() {
-        uut = new TrackController(mockTrackService, new ModelMapper());
+        uut = new TrackController(mockTrackService, new Mapper());
     }
 
     @Test

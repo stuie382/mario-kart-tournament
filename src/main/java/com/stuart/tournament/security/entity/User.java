@@ -45,6 +45,8 @@ public class User {
     private Collection<Role> roles;
 
     @OneToOne
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private Player player;
 
     public User(String firstName, String lastName, String username, String password, List<Role> roles) {

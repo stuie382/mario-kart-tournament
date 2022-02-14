@@ -4,7 +4,7 @@ import com.stuart.tournament.security.entity.User;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "player", schema = "mariokart")
@@ -33,6 +33,8 @@ public class Player {
     }
 
     @OneToOne(cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     private User user;
 
     /**
@@ -41,7 +43,7 @@ public class Player {
     @OneToMany(mappedBy = "player", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<RaceParticipation> participation;
+    private Set<RaceParticipation> participation;
 
     /**
      * A player may have created a number of tournaments
@@ -49,5 +51,5 @@ public class Player {
     @OneToMany(mappedBy = "owningPlayer", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private List<Tournament> ownedTournaments;
+    private Set<Tournament> ownedTournaments;
 }

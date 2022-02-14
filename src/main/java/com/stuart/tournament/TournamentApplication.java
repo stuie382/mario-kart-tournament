@@ -1,6 +1,8 @@
 package com.stuart.tournament;
 
+import com.stuart.tournament.utilities.Mapper;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.config.Configuration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,22 +18,18 @@ public class TournamentApplication {
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper mapper = new ModelMapper();
-//        mapper.getConfiguration().set
-//        mapper.addMappings(trackPropertyMap);
-
+        mapper.getConfiguration().setFieldAccessLevel(Configuration.AccessLevel.PRIVATE)
+                .setFieldMatchingEnabled(true);
         return mapper;
     }
-//
-//    private PropertyMap<Track, TrackDto> trackPropertyMap = new PropertyMap<Track, TrackDto>() {
-//        @Override
-//        protected void configure() {
-//            skip(destination.setId);
-//        }
-//    }
-
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public Mapper mapper() {
+        return new Mapper(modelMapper());
     }
 }

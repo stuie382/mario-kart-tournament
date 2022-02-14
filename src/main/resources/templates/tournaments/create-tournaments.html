@@ -14,12 +14,11 @@
     <link rel="icon" th:href="@{/images/favicon/retro_mushroom_32.png}" sizes="32x32" type="image/png"/>
     <link type="text/css" rel="stylesheet" th:href="@{/css/basic.css}"/>
 
-    <title>Tournaments</title>
+    <title>Create A Tournament</title>
 </head>
-
 <body class="background-default">
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary align-middle">
-    <a class="navbar-brand" href="#" style="margin-left:10px">Tournaments</a>
+    <a class="navbar-brand" href="#" style="margin-left:10px">Create A Tournament</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -28,18 +27,20 @@
         <div class="navbar-nav" sec:authorize="isAuthenticated()">
             <a class="nav-item nav-link active" th:href="@{/}">Home <span class="sr-only"></span></a>
             <a class="nav-item nav-link" th:href="@{/tracks/list}">Track list</a>
+            <a class="nav-item nav-link" th:href="@{/tournaments}">Tournaments</a>
             <a class="nav-item nav-link ms-auto" th:method="POST" th:href="@{/logout}">Logout</a>
         </div>
     </div>
 </nav>
-<br>
+<!--Date, Name, owning player, list of races-->
 <div class="container">
-    <div class="btn-group-lg" role="group" aria-label="Tournament Actions">
-        <a class="btn btn-primary btn-lg" role="button" aria-pressed="true"
-           th:href="@{tournaments/create}">Create Tournament</a>
-        <a class="btn btn-primary btn-lg" role="button" href="#">Show My Hosted Tournaments</a>
-        <a class="btn btn-primary btn-lg" role="button" href="#">Show My Tournaments Results</a>
-    </div>
+    <form th:action="@{tournaments/create}" th:object="${theTournament}" method="POST">
+        <div class="input-group">
+            <label for="startDate">Tournament Start Date</label>
+            <input id="startDate" class="form-control" type="date">
+        </div>
+    </form>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"

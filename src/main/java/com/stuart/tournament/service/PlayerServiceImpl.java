@@ -1,35 +1,30 @@
 package com.stuart.tournament.service;
 
-import com.stuart.tournament.dto.PlayerDto;
 import com.stuart.tournament.entity.Player;
 import com.stuart.tournament.repository.PlayerRepository;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class PlayerServiceImpl implements PlayerService {
 
     private final PlayerRepository playerRepository;
-    private final ModelMapper modelMapper;
 
-    public PlayerServiceImpl(PlayerRepository playerRepository, ModelMapper modelMapper) {
+    public PlayerServiceImpl(PlayerRepository playerRepository) {
         this.playerRepository = playerRepository;
-        this.modelMapper = modelMapper;
     }
-
 
     @Override
-    public List<PlayerDto> findAll() {
-        List<Player> players = playerRepository.findAll();
-        return players.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+    public Optional<Player> findPlayerByUsername(String username) {
+        return playerRepository.findPlayerByUsername(username);
     }
 
-    private PlayerDto convertToDto(Player entity) {
-        return modelMapper.map(entity, PlayerDto.class);
+    @Override
+    public Set<Player> findAll() {
+        return playerRepository.findAllByOrderByFirstName();
     }
+
+
 }
